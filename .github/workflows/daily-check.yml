@@ -1,0 +1,39 @@
+name: Check Free Games
+
+on:
+  schedule:
+    # Runs every 2 hours (at minute 0)
+    - cron: '0 */2 * * *'
+  workflow_dispatch: # Allows you to run it manually to test
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # IMPORTANT: Allows the bot to save the history file
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Bot Script
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        run: python main.py
+
+      - name: Commit and Push History
+        # Only run this step if the script actually created/modified the file
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add seen_games.json
+          # Commit only if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update seen games list" && git push)
