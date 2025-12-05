@@ -40,8 +40,8 @@ def send_discord_notification(game):
     }
     
     payload = {
-        "username": "Free Games Bot",
-        "avatar_url": "https://i.imgur.com/4M34hi2.png",
+        "username": "Zendevve's Free Game Bot",
+        "avatar_url": "https://i.ibb.co/JRLpzLdY/Chat-GPT-Image-Aug-31-2025-03-11-19-PM.png",
         "embeds": [embed]
     }
     
